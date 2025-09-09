@@ -33,7 +33,7 @@ public abstract class MediaItem {
     public String toString() {
         return getClass().getSimpleName() + "{" +
                 "id=" + id +
-                ", title='" + title + ''' +
+                ", title='" + title + '\'' +
                 ", copiesAvailable=" + copiesAvailable +
                 '}';
     }
