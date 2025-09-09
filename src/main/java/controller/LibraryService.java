@@ -1,9 +1,15 @@
 package controller;
 
+import model.Unterklassen.Book;
+import model.Unterklassen.DVD;
+import model.Unterklassen.Magazine;
+import model.Unterklassen.Client;
+import model.MediaItem;
+
+
 import exception.ItemNotFoundException;
 import exception.OutOfStockException;
 
-import com.example.library.model.*;
 import repository.InMemoryDatabase;
 import org.springframework.stereotype.Service;
 
