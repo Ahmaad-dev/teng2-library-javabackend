@@ -2,9 +2,11 @@ package controller;
 
 import org.springframework.web.bind.annotation.*;
 import repository.InMemoryDatabase;
-import model.DVD;
-import model.Magazine;
-import model.Client;
+import model.Unterklassen.DVD;
+import model.Unterklassen.Magazine;
+import model.Unterklassen.Client;
+import model.Unterklassen.Book;
+import controller.LibraryService;
 
 import java.util.Collection;
 import java.util.List;
