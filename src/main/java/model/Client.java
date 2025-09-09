@@ -44,7 +44,7 @@ public class Client {
         return "Client{" +
                 "id=" + id +
                 ", name='" + name + ''' +
-                ", borrowedItems=" + borrowedItems +
+        ", borrowedItems=" + borrowedItems +
                 '}';
     }
 }

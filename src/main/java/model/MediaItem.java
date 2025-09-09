@@ -1,4 +1,4 @@
-package com.example.library.model;
+package model;
 
 import java.util.UUID;
 

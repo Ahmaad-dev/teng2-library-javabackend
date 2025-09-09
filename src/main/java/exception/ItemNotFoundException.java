@@ -1,4 +1,4 @@
-package com.example.library.exception;
+package exception;
 
 public class ItemNotFoundException extends RuntimeException {
     public ItemNotFoundException(String message) {

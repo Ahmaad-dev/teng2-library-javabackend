@@ -1,4 +1,4 @@
-package com.example.library.controller;
+package controller;
 
 import com.example.library.model.*;
 import com.example.library.repository.InMemoryDatabase;

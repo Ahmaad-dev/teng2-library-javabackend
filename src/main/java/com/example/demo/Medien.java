@@ -1,10 +1,10 @@
 package com.example.demo;
 
-public abstract class Medium {
+public abstract class Medien {
     private String title;
     private int copies;
 
-    protected Medium(String title, int copies) {
+    protected Medien(String title, int copies) {
         this.title = title;
         this.copies = copies;
     }

@@ -1,4 +1,4 @@
-package com.example.library.model;
+package model;
 
 public class DVD extends MediaItem {
     public DVD(String title, int copiesAvailable) {

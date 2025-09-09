@@ -1,4 +1,4 @@
-package com.example.library.model;
+package model;
 
 public class Magazine extends MediaItem {
     public Magazine(String title, int copiesAvailable) {

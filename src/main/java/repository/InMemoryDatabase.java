@@ -1,4 +1,4 @@
-package com.example.library.repository;
+package repository;
 
 import com.example.library.model.*;
 

@@ -1,4 +1,4 @@
-package com.example.library.service;
+package service;
 
 import com.example.library.exception.ItemNotFoundException;
 import com.example.library.exception.OutOfStockException;

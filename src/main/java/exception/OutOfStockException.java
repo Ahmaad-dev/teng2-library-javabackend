@@ -1,4 +1,4 @@
-package com.example.library.exception;
+package exception;
 
 public class OutOfStockException extends RuntimeException {
     public OutOfStockException(String message) {
