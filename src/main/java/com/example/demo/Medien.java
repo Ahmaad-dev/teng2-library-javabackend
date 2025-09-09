@@ -5,7 +5,6 @@ public abstract class Medium {
     protected Medium(String title, int copies) {
         this.title = title;
         this.copies = copies;
-    
     public String getTitle() {
         return title;
     }
