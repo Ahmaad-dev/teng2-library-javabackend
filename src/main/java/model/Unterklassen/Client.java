@@ -1,4 +1,4 @@
-package com.example.library.model;
+package model.Unterklassen;
 
 import java.util.ArrayList;
 import java.util.List;
