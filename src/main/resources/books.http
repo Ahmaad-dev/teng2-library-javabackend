@@ -1,0 +1,31 @@
+POST http://localhost:8080/book
+Content-Type: application/json
+
+{
+  "title": "Harry Potter 1 and the Philosopher's Stone",
+  "author": "J. K. Rowling",
+  "isbn":  "978-1-4088-5565-2"
+}
+
+###
+
+POST http://localhost:8080/book
+Content-Type: application/json
+
+{
+  "title": "Harry Potter 2 and the Chamber of Secrets",
+  "author": "J. K. Rowling",
+  "isbn":  "978-1-4088-5566-9"
+}
+
+###
+
+GET http://localhost:8080/books
+
+###
+
+GET http://localhost:8080/books/978-1-4088-5566-9
+
+###
+
+GET http://localhost:8080/books/asd
