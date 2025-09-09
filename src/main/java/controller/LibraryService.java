@@ -1,9 +1,10 @@
-package service;
+package controller;
 
-import com.example.library.exception.ItemNotFoundException;
-import com.example.library.exception.OutOfStockException;
+import exception.ItemNotFoundException;
+import exception.OutOfStockException;
+
 import com.example.library.model.*;
-import com.example.library.repository.InMemoryDatabase;
+import repository.InMemoryDatabase;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

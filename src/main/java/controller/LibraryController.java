@@ -1,9 +1,10 @@
 package controller;
 
-import com.example.library.model.*;
-import com.example.library.repository.InMemoryDatabase;
-import com.example.library.service.LibraryService;
 import org.springframework.web.bind.annotation.*;
+import repository.InMemoryDatabase;
+import model.DVD;
+import model.Magazine;
+import model.Client;
 
 import java.util.Collection;
 import java.util.List;

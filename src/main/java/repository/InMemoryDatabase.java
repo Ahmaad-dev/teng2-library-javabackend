@@ -1,11 +1,14 @@
 package repository;
 
-import com.example.library.model.*;
-
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+
+import model.DVD;
+import model.Magazine;
+import model.Client;
+
 
 @Component
 public class InMemoryDatabase {
