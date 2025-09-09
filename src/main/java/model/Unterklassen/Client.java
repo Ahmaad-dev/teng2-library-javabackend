@@ -3,6 +3,7 @@ package model.Unterklassen;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import model.MediaItem;
 
 public class Client {
     private UUID id;
@@ -32,7 +33,11 @@ public class Client {
     }
 
     public void borrowItem(MediaItem item) {
-        borrowedItems.add(item);
+        if (canBorrowMore()) {
+            borrowedItems.add(item);
+        } else {
+            throw new IllegalStateException("Maximale Anzahl an ausgeliehenen Medien erreicht.");
+        }
     }
 
     public void returnItem(MediaItem item) {
@@ -43,8 +48,8 @@ public class Client {
     public String toString() {
         return "Client{" +
                 "id=" + id +
-                ", name='" + name + ''' +
-        ", borrowedItems=" + borrowedItems +
+                ", name='" + name + '\'' +
+                ", borrowedItems=" + borrowedItems +
                 '}';
     }
 }
