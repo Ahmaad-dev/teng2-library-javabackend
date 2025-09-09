@@ -11,7 +11,6 @@ public abstract class Medium {
     public void setTitle(String title) {
         this.title = title;
     }
-
     public int getCopies() {
         return copies;
     }
