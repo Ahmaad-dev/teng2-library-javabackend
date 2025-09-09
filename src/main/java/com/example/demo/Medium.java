@@ -1,3 +1,5 @@
+package com.example.demo;
+
 public abstract class Medium {
     private String title;
     private int copies;
@@ -5,12 +7,16 @@ public abstract class Medium {
     protected Medium(String title, int copies) {
         this.title = title;
         this.copies = copies;
+    }
+
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
+
     public int getCopies() {
         return copies;
     }
