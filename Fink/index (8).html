@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Bibliothekssystem</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        input, button { margin: 5px; padding: 6px; }
+        .result { margin-top: 10px; white-space: pre-wrap; font-family: monospace; background: #f0f0f0; padding: 10px; }
+    </style>
+</head>
+<body>
+<h1>📚 Bibliothekssystem</h1>
+
+<h2>📖 Bücher suchen</h2>
+<input type="text" id="bookQuery" placeholder="Titel oder Autor">
+<button onclick="searchBooks()">Suchen</button>
+<div class="result" id="bookResult"></div>
+
+<h2>📀 DVDs suchen</h2>
+<input type="text" id="dvdQuery" placeholder="Titel">
+<button onclick="searchDVDs()">Suchen</button>
+<div class="result" id="dvdResult"></div>
+
+<h2>📰 Magazine suchen</h2>
+<input type="text" id="magazineQuery" placeholder="Titel">
+<button onclick="searchMagazines()">Suchen</button>
+<div class="result" id="magazineResult"></div>
+
+<script>
+    async function search(endpoint, queryId, resultId) {
+        const query = document.getElementById(queryId).value;
+        const response = await fetch(`/api/${endpoint}/search?query=` + encodeURIComponent(query));
+        const data = await response.json();
+        document.getElementById(resultId).innerText = JSON.stringify(data, null, 2);
+    }
+
+    function searchBooks() {
+        search("books", "bookQuery", "bookResult");
+    }
+
+    function searchDVDs() {
+        search("dvds", "dvdQuery", "dvdResult");
+    }
+
+    function searchMagazines() {
+        search("magazines", "magazineQuery", "magazineResult");
+    }
+</script>
+</body>
+</html>
