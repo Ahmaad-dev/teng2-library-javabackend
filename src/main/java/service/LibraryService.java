@@ -1,9 +1,10 @@
 package service;
 
-import com.example.library.exception.ItemNotFoundException;
-import com.example.library.exception.OutOfStockException;
-import com.example.library.model.*;
-import com.example.library.repository.InMemoryDatabase;
+import exception.ItemNotFoundException;
+import exception.OutOfStockException;
+import model.MediaItem;
+import model.Unterklassen.*;
+import repository.InMemoryDatabase;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -89,5 +90,47 @@ public class LibraryService {
         if (db.dvds.containsKey(id)) return db.dvds.get(id);
         if (db.magazines.containsKey(id)) return db.magazines.get(id);
         throw new ItemNotFoundException("Medium mit ID " + id + " nicht gefunden");
+    }
+
+    // ========================= Ausleihstatus prüfen =========================
+
+    public List<MediaItem> getBorrowedItemsForClient(UUID clientId) {
+        Client client = db.clients.get(clientId);
+        if (client == null) throw new ItemNotFoundException("Client nicht gefunden");
+        return client.getBorrowedItems();
+    }
+
+    public String getItemStatus(UUID itemId) {
+        MediaItem item = findAnyMedia(itemId);
+        int available = item.getCopiesAvailable();
+        int borrowed = countBorrowedCopies(itemId);
+        int total = available + borrowed;
+        
+        return String.format("Verfügbar: %d von %d Exemplaren (ausgeliehen: %d)", 
+                           available, total, borrowed);
+    }
+
+    public int getItemAvailability(UUID itemId) {
+        MediaItem item = findAnyMedia(itemId);
+        return item.getCopiesAvailable();
+    }
+
+    public List<Client> getClientsBorrowingItem(UUID itemId) {
+        MediaItem item = findAnyMedia(itemId);
+        return db.clients.values().stream()
+                .filter(client -> client.getBorrowedItems().contains(item))
+                .collect(Collectors.toList());
+    }
+
+    public boolean isItemBorrowed(UUID itemId) {
+        return !getClientsBorrowingItem(itemId).isEmpty();
+    }
+
+    private int countBorrowedCopies(UUID itemId) {
+        MediaItem item = findAnyMedia(itemId);
+        return (int) db.clients.values().stream()
+                .flatMap(client -> client.getBorrowedItems().stream())
+                .filter(borrowedItem -> borrowedItem.getId().equals(itemId))
+                .count();
     }
 }

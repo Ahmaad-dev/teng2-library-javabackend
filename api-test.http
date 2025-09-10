@@ -1,0 +1,51 @@
+### Test der Library API
+### Alle Bücher abrufen
+GET http://localhost:8080/api/books
+
+###
+
+### Alle DVDs abrufen
+GET http://localhost:8080/api/dvds
+
+###
+
+### Alle Magazine abrufen
+GET http://localhost:8080/api/magazines
+
+###
+
+### Alle Clients abrufen
+GET http://localhost:8080/api/clients
+
+###
+
+### Bücher nach Titel/Autor suchen (Regex)
+GET http://localhost:8080/api/books/search?query=Harry
+
+###
+
+### DVDs suchen
+GET http://localhost:8080/api/dvds/search?query=Matrix
+
+###
+
+### Magazine suchen
+GET http://localhost:8080/api/magazines/search?query=National
+
+###
+
+### Buch nach ISBN finden
+GET http://localhost:8080/api/books/isbn/978-3608939811
+
+###
+
+### Medium ausleihen (Client-ID und Item-ID müssen existieren)
+### Erst alle Clients und Bücher abrufen, um gültige IDs zu bekommen
+POST http://localhost:8080/api/clients/{clientId}/borrow/{itemId}
+
+###
+
+### Medium zurückgeben
+POST http://localhost:8080/api/clients/{clientId}/return/{itemId}
+
+###

@@ -1,6 +1,7 @@
 package repository;
 
-import com.example.library.model.*;
+import model.MediaItem;
+import model.Unterklassen.*;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;

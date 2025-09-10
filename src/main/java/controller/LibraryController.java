@@ -1,8 +1,9 @@
 package controller;
 
-import com.example.library.model.*;
-import com.example.library.repository.InMemoryDatabase;
-import com.example.library.service.LibraryService;
+import model.MediaItem;
+import model.Unterklassen.*;
+import repository.InMemoryDatabase;
+import service.LibraryService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -77,5 +78,27 @@ public class LibraryController {
     @GetMapping("/clients")
     public Collection<Client> getAllClients() {
         return db.clients.values();
+    }
+
+    // ====================== Ausleihstatus prüfen ======================
+
+    @GetMapping("/clients/{clientId}/borrowed-items")
+    public List<MediaItem> getBorrowedItems(@PathVariable UUID clientId) {
+        return service.getBorrowedItemsForClient(clientId);
+    }
+
+    @GetMapping("/items/{itemId}/status")
+    public String getItemStatus(@PathVariable UUID itemId) {
+        return service.getItemStatus(itemId);
+    }
+
+    @GetMapping("/items/{itemId}/availability")
+    public int getItemAvailability(@PathVariable UUID itemId) {
+        return service.getItemAvailability(itemId);
+    }
+
+    @GetMapping("/items/{itemId}/borrower")
+    public List<Client> getItemBorrowers(@PathVariable UUID itemId) {
+        return service.getClientsBorrowingItem(itemId);
     }
 }

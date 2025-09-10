@@ -1,6 +1,4 @@
-package model.Unterklassen;
-
-import model.MediaItem;
+package model;
 
 import java.util.ArrayList;
 import java.util.List;

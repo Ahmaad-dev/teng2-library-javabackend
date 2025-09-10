@@ -1,0 +1,153 @@
+### Library Management System - API Tests
+
+### 1. Alle Bücher anzeigen
+GET http://localhost:8080/api/books
+Accept: application/json
+
+###
+
+### 2. Bücher nach "Java" suchen
+GET http://localhost:8080/api/books/search?query=Java
+Accept: application/json
+
+###
+
+### 3. Bücher nach "Harry" suchen (Regex)
+GET http://localhost:8080/api/books/search?query=.*Harry.*
+Accept: application/json
+
+###
+
+### 4. Buch nach ISBN finden
+GET http://localhost:8080/api/books/isbn/978-3608939811
+Accept: application/json
+
+###
+
+### 5. Alle DVDs anzeigen
+GET http://localhost:8080/api/dvds
+Accept: application/json
+
+###
+
+### 6. DVDs nach "Matrix" suchen
+GET http://localhost:8080/api/dvds/search?query=Matrix
+Accept: application/json
+
+###
+
+### 7. Alle Magazine anzeigen
+GET http://localhost:8080/api/magazines
+Accept: application/json
+
+###
+
+### 8. Magazine nach "National" suchen
+GET http://localhost:8080/api/magazines/search?query=National
+Accept: application/json
+
+###
+
+### 9. Alle Kunden anzeigen
+GET http://localhost:8080/api/clients
+Accept: application/json
+
+###
+
+### 10. Medium ausleihen (Beispiel - ersetze IDs durch echte UUIDs)
+POST http://localhost:8080/api/clients/{{clientId}}/borrow/{{itemId}}
+Content-Type: application/json
+
+# Hinweis: Hole zuerst die echten Client- und Item-IDs von den obigen GET-Endpunkten
+
+###
+
+### 11. Medium zurückgeben (Beispiel - ersetze IDs durch echte UUIDs)
+POST http://localhost:8080/api/clients/{{clientId}}/return/{{itemId}}
+Content-Type: application/json
+
+# Hinweis: Verwende die gleichen IDs wie beim Ausleihen
+
+###
+
+### Hilfreich: Alle Endpunkte in einem Durchlauf testen
+
+### Schritt 1: Kunden-IDs abrufen
+GET http://localhost:8080/api/clients
+
+### Schritt 2: Buch-IDs abrufen  
+GET http://localhost:8080/api/books
+
+### Schritt 3: Kopiere Client-ID und Book-ID aus den Antworten oben
+### und verwende sie in den folgenden Anfragen
+
+### Beispiel Ausleihe (ersetze die UUIDs):
+# POST http://localhost:8080/api/clients/DEINE-CLIENT-UUID-HIER/borrow/DEINE-BOOK-UUID-HIER
+
+### Beispiel Rückgabe (ersetze die UUIDs):
+# POST http://localhost:8080/api/clients/DEINE-CLIENT-UUID-HIER/return/DEINE-BOOK-UUID-HIER
+
+###
+
+### ====================== AUSLEIHSTATUS PRÜFEN ======================
+
+### 12. Ausgeliehene Medien eines Kunden anzeigen
+GET http://localhost:8080/api/clients/{{clientId}}/borrowed-items
+Accept: application/json
+
+# Hinweis: Ersetze {{clientId}} durch eine echte Client-UUID
+
+###
+
+### 13. Status eines Mediums prüfen (verfügbar/ausgeliehen)
+GET http://localhost:8080/api/items/{{itemId}}/status
+Accept: application/json
+
+# Hinweis: Ersetze {{itemId}} durch eine echte Item-UUID
+
+###
+
+### 14. Verfügbare Exemplare eines Mediums prüfen
+GET http://localhost:8080/api/items/{{itemId}}/availability
+Accept: application/json
+
+# Hinweis: Ersetze {{itemId}} durch eine echte Item-UUID
+
+###
+
+### 15. Wer hat ein bestimmtes Medium ausgeliehen?
+GET http://localhost:8080/api/items/{{itemId}}/borrower
+Accept: application/json
+
+# Hinweis: Ersetze {{itemId}} durch eine echte Item-UUID
+
+###
+
+### ====================== VOLLSTÄNDIGER TEST-WORKFLOW ======================
+
+### Schritt 1: Client-UUID abrufen
+GET http://localhost:8080/api/clients
+
+### Schritt 2: Buch-UUID abrufen
+GET http://localhost:8080/api/books
+
+### Schritt 3: Status vor der Ausleihe prüfen (mit echter UUID)
+# GET http://localhost:8080/api/items/BUCH-UUID-HIER/status
+
+### Schritt 4: Buch ausleihen (mit echten UUIDs)
+# POST http://localhost:8080/api/clients/CLIENT-UUID-HIER/borrow/BUCH-UUID-HIER
+
+### Schritt 5: Status nach der Ausleihe prüfen
+# GET http://localhost:8080/api/items/BUCH-UUID-HIER/status
+
+### Schritt 6: Ausgeliehene Medien des Kunden anzeigen
+# GET http://localhost:8080/api/clients/CLIENT-UUID-HIER/borrowed-items
+
+### Schritt 7: Wer hat das Buch ausgeliehen?
+# GET http://localhost:8080/api/items/BUCH-UUID-HIER/borrower
+
+### Schritt 8: Buch zurückgeben
+# POST http://localhost:8080/api/clients/CLIENT-UUID-HIER/return/BUCH-UUID-HIER
+
+### Schritt 9: Status nach der Rückgabe prüfen
+# GET http://localhost:8080/api/items/BUCH-UUID-HIER/status
