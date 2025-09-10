@@ -1,12 +1,21 @@
 package repository;
 
+<<<<<<< HEAD
 import model.MediaItem;
 import model.Unterklassen.*;
 
+=======
+>>>>>>> f4bef0cc6630fd5a2ed18a772669fa371d22d8e9
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+
+import model.Unterklassen.Book;
+import model.Unterklassen.DVD;
+import model.Unterklassen.Magazine;
+import model.Unterklassen.Client;
+
 
 @Component
 public class InMemoryDatabase {
@@ -30,16 +39,17 @@ public class InMemoryDatabase {
         addBook(new Book("Spring in Action", "Craig Walls", "978-1617294945", 3));
 
         // DVDs
-        addDVD(new DVD("Matrix", 5));
-        addDVD(new DVD("Inception", 3));
-        addDVD(new DVD("Interstellar", 2));
-        addDVD(new DVD("The Dark Knight", 4));
-        addDVD(new DVD("Shutter Island", 3));
-        addDVD(new DVD("Avengers: Endgame", 2));
-        addDVD(new DVD("Pulp Fiction", 2));
-        addDVD(new DVD("Joker", 1));
-        addDVD(new DVD("Fight Club", 4));
-        addDVD(new DVD("Blade Runner", 2));
+        addDVD(new DVD("Matrix", "Wachowski", 1999, 5));
+        addDVD(new DVD("Inception", "Nolan", 2010, 3));
+        addDVD(new DVD("Interstellar", "Nolan", 2014, 2));
+        addDVD(new DVD("The Dark Knight", "Nolan", 2008, 4));
+        addDVD(new DVD("Shutter Island", "Scorsese", 2010, 3));
+        addDVD(new DVD("Avengers: Endgame", "Russo Brothers", 2019, 2));
+        addDVD(new DVD("Pulp Fiction", "Tarantino", 1994, 2));
+        addDVD(new DVD("Joker", "Phillips", 2019, 1));
+        addDVD(new DVD("Fight Club", "Fincher", 1999, 4));
+        addDVD(new DVD("Blade Runner", "Scott", 1982, 2));
+
 
         // Magazine
         addMagazine(new Magazine("National Geographic", 3));

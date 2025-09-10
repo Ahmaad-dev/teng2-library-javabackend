@@ -1,9 +1,22 @@
-package service;
+package controller;
 
+<<<<<<< HEAD:src/main/java/service/LibraryService.java
 import exception.ItemNotFoundException;
 import exception.OutOfStockException;
 import model.MediaItem;
 import model.Unterklassen.*;
+=======
+import model.Unterklassen.Book;
+import model.Unterklassen.DVD;
+import model.Unterklassen.Magazine;
+import model.Unterklassen.Client;
+import model.MediaItem;
+
+
+import exception.ItemNotFoundException;
+import exception.OutOfStockException;
+
+>>>>>>> f4bef0cc6630fd5a2ed18a772669fa371d22d8e9:src/main/java/controller/LibraryService.java
 import repository.InMemoryDatabase;
 import org.springframework.stereotype.Service;
 

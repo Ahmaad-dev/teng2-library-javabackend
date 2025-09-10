@@ -1,10 +1,19 @@
 package controller;
 
+<<<<<<< HEAD
 import model.MediaItem;
 import model.Unterklassen.*;
 import repository.InMemoryDatabase;
 import service.LibraryService;
+=======
+>>>>>>> f4bef0cc6630fd5a2ed18a772669fa371d22d8e9
 import org.springframework.web.bind.annotation.*;
+import repository.InMemoryDatabase;
+import model.Unterklassen.DVD;
+import model.Unterklassen.Magazine;
+import model.Unterklassen.Client;
+import model.Unterklassen.Book;
+import controller.LibraryService;
 
 import java.util.Collection;
 import java.util.List;
