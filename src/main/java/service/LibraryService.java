@@ -1,4 +1,4 @@
-package controller;
+package service;
 
 import exception.ItemNotFoundException;
 import exception.OutOfStockException;

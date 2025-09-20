@@ -1,19 +1,11 @@
 package repository;
 
-<<<<<<< HEAD
 import model.MediaItem;
 import model.Unterklassen.*;
-
-=======
->>>>>>> f4bef0cc6630fd5a2ed18a772669fa371d22d8e9
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-
-import model.Unterklassen.Book;
-import model.Unterklassen.DVD;
-import model.Unterklassen.Magazine;
 import model.Unterklassen.Client;
 
 
