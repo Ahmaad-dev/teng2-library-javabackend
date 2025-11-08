@@ -1,0 +1,1 @@
+web: java -Dserver.port=5000 -jar library-management-system-1.0.0.jar

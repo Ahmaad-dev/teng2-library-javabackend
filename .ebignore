@@ -1,0 +1,14 @@
+.git
+.gitignore
+README.md
+Umfang-des-Projektes.md
+UML-Diagram/
+api-tests.http
+.vscode/
+*.log
+target/test-classes/
+target/generated-sources/
+target/maven-archiver/
+target/maven-status/
+target/surefire-reports/
+src/test/

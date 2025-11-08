@@ -15,6 +15,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
 public class LibraryController {
 
     private final LibraryService service;
@@ -28,21 +29,25 @@ public class LibraryController {
     // ====================== Suchen ======================
 
     @GetMapping("/books/search")
+    @CrossOrigin(origins = "*")
     public List<Book> searchBooks(@RequestParam String query) {
         return service.searchBooksByRegex(query);
     }
 
     @GetMapping("/dvds/search")
+    @CrossOrigin(origins = "*")
     public List<DVD> searchDVDs(@RequestParam String query) {
         return service.searchDVDsByRegex(query);
     }
 
     @GetMapping("/magazines/search")
+    @CrossOrigin(origins = "*")
     public List<Magazine> searchMagazines(@RequestParam String query) {
         return service.searchMagazinesByRegex(query);
     }
 
     @GetMapping("/books/isbn/{isbn}")
+    @CrossOrigin(origins = "*")
     public Book findBookByIsbn(@PathVariable String isbn) {
         return service.findBookByIsbn(isbn);
     }
@@ -64,16 +69,19 @@ public class LibraryController {
     // ====================== Datenübersicht ======================
 
     @GetMapping("/books")
+    @CrossOrigin(origins = "*")
     public Collection<Book> getAllBooks() {
         return db.books.values();
     }
 
     @GetMapping("/dvds")
+    @CrossOrigin(origins = "*")
     public Collection<DVD> getAllDVDs() {
         return db.dvds.values();
     }
 
     @GetMapping("/magazines")
+    @CrossOrigin(origins = "*")
     public Collection<Magazine> getAllMagazines() {
         return db.magazines.values();
     }
@@ -103,6 +111,20 @@ public class LibraryController {
     @GetMapping("/items/{itemId}/borrower")
     public List<Client> getItemBorrowers(@PathVariable UUID itemId) {
         return service.getClientsBorrowingItem(itemId);
+    }
+
+    // ====================== Health Check für AWS ======================
+    
+    @GetMapping("/health")
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<Map<String, String>> healthCheck() {
+        Map<String, String> health = Map.of(
+            "status", "UP",
+            "service", "Library Management System",
+            "timestamp", java.time.Instant.now().toString(),
+            "version", "1.0.0"
+        );
+        return ResponseEntity.ok(health);
     }
 
     // ====================== Client Management ======================
