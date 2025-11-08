@@ -25,7 +25,23 @@ Ein vollständiges Bibliotheksverwaltungssystem, entwickelt mit Spring Boot und 
 cd teng2-library-javabackend
 
 # Anwendung starten
-./mvnw spring-boot:run
+# Anwendung starten
+.\mvnw.cmd spring-boot:run
+```
+
+### Hot Reload
+Spring DevTools aktiviert automatisches Neuladen bei Dateiänderungen während der Entwicklung.
+
+## 📋 UML-Dokumentation
+
+Vollständige UML-Analyse des Systems verfügbar unter: **[UML/](UML/)**
+- Klassendiagramm
+- Anwendungsfalldiagramm  
+- Sequenzdiagramm
+- Komponentendiagramm
+- Zustandsdiagramm
+
+## 📄 Lizenz
 # Oder unter Windows:
 .\mvnw.cmd spring-boot:run
 ```
