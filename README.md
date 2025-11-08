@@ -6,9 +6,10 @@ Ein vollständiges Bibliotheksverwaltungssystem, entwickelt mit Spring Boot und 
 
 - **Medienverwaltung**: Bücher, DVDs und Magazine verwalten
 - **Suchfunktion**: Regex-basierte Suche nach Titel, Autor und ISBN
-- **Kundenverwaltung**: Registrierung und Verwaltung von Bibliothekskunden
-- **Ausleihsystem**: Ausleihe und Rückgabe von Medien
+- **Kundenverwaltung**: Vollständige CRUD-Operationen für Bibliothekskunden
+- **Ausleihsystem**: Ausleihe und Rückgabe von Medien mit Statusverfolgung
 - **REST API**: Vollständige RESTful API für alle Funktionen
+- **Web-Frontend**: Interaktive HTML-Oberfläche für alle Funktionen
 - **Exception Handling**: Umfassende Fehlerbehandlung
 
 ## 🚀 Schnellstart
@@ -30,6 +31,11 @@ cd teng2-library-javabackend
 ```
 
 Die Anwendung läuft dann auf: `http://localhost:8080`
+
+### 🌐 Web-Interface
+Das System bietet eine vollständige Web-Oberfläche unter:
+- **Hauptseite**: `http://localhost:8080`
+- **Interaktive API-Tests**: Alle Funktionen über die Web-UI testbar
 
 ### 🔧 VS Code Tasks
 
@@ -59,17 +65,34 @@ Tasks über `Ctrl+Shift+P` → "Tasks: Run Task" ausführen.
 
 ### Kunden
 - `GET /api/clients` - Alle Kunden anzeigen
+- `POST /api/clients` - Neuen Kunden erstellen
+- `GET /api/clients/{id}` - Kunde nach ID suchen
+- `PUT /api/clients/{id}` - Kunden aktualisieren
+- `DELETE /api/clients/{id}` - Kunde löschen
 
-### Ausleihe
+### Ausleihe & Statusabfragen
 - `POST /api/clients/{clientId}/borrow/{itemId}` - Medium ausleihen
 - `POST /api/clients/{clientId}/return/{itemId}` - Medium zurückgeben
+- `GET /api/clients/{clientId}/borrowed-items` - Ausgeliehene Medien eines Kunden
+- `GET /api/items/{itemId}/status` - Status eines Mediums prüfen
+- `GET /api/items/{itemId}/availability` - Verfügbare Exemplare prüfen
+- `GET /api/items/{itemId}/borrower` - Wer hat ein Medium ausgeliehen
 
 ## 🧪 API testen
 
 ### Mit HTTP-Datei (VS Code)
-Die Datei `src/main/resources/api-tests.http` enthält vorkonfigurierte API-Tests.
+Die Datei `api-tests.http` enthält vorkonfigurierte API-Tests für alle Endpoints.
 
-### Mit Browser
+### Mit Web-Interface
+Öffne `http://localhost:8080` im Browser für eine vollständige interaktive Oberfläche mit:
+- 📊 Datenübersicht aller Medien und Kunden
+- 🔍 Erweiterte Suchfunktionen
+- 📖 Ausleihe-Management
+- 👥 Vollständige Kundenverwaltung
+- ⚙️ Admin-Funktionen und Status-Abfragen
+- 🎯 Automatische Demo-Präsentationen
+
+### Mit Browser (API direkt)
 - Bücher: `http://localhost:8080/api/books`
 - DVDs: `http://localhost:8080/api/dvds`
 - Magazine: `http://localhost:8080/api/magazines`
@@ -85,6 +108,14 @@ curl "http://localhost:8080/api/books/search?query=Java"
 
 # Buch nach ISBN finden
 curl http://localhost:8080/api/books/isbn/978-3608939811
+
+# Neuen Kunden erstellen
+curl -X POST http://localhost:8080/api/clients \
+  -H "Content-Type: application/json" \
+  -d '{"name":"John Doe","email":"john@example.com","phone":"+49 123 456789"}'
+
+# Medium ausleihen
+curl -X POST http://localhost:8080/api/clients/{clientId}/borrow/{itemId}
 ```
 
 ## 📊 Testdaten
@@ -100,8 +131,9 @@ Die Anwendung wird mit folgenden Testdaten initialisiert:
 ### Magazine (10 Stück)
 - National Geographic, TIME, Scientific American, Der Spiegel, etc.
 
-### Kunden (5 Stück)
-- Anna Meier, Thomas Huber, Lena Schmidt, Max Mustermann, Julia Berger
+### Kunden (10 Stück)
+- Anna Meier, Thomas Huber, Lena Schmidt, Max Mustermann, Julia Berger,
+- Michael Richter, Daniel Klein, Stefan Wagner, Sarah Hoffmann, Maria Kaufmann
 
 ## 🏗️ Projektstruktur
 
@@ -109,8 +141,8 @@ Die Anwendung wird mit folgenden Testdaten initialisiert:
 src/
 ├── main/
 │   ├── java/
-│   │   ├── com/example/demo/
-│   │   │   └── DemoApplication.java         # Hauptklasse
+│   │   ├── com/library/
+│   │   │   └── LibraryApplication.java      # Hauptklasse
 │   │   ├── controller/
 │   │   │   └── LibraryController.java       # REST Controller
 │   │   ├── service/
@@ -119,32 +151,35 @@ src/
 │   │   │   └── InMemoryDatabase.java        # Datenbank-Simulation
 │   │   ├── model/
 │   │   │   ├── MediaItem.java               # Basis-Klasse
-│   │   │   └── Unterklassen/
-│   │   │       ├── Book.java                # Buch-Modell
-│   │   │       ├── DVD.java                 # DVD-Modell
-│   │   │       ├── Magazine.java            # Magazin-Modell
-│   │   │       └── Client.java              # Kunden-Modell
+│   │   │   ├── Book.java                    # Buch-Modell
+│   │   │   ├── DVD.java                     # DVD-Modell
+│   │   │   ├── Magazine.java                # Magazin-Modell
+│   │   │   ├── Client.java                  # Kunden-Modell
+│   │   │   └── dto/
+│   │   │       └── CreateClientRequest.java # Client-DTO
 │   │   └── exception/
 │   │       ├── GlobalExceptionHandler.java  # Fehlerbehandlung
 │   │       ├── ItemNotFoundException.java
 │   │       └── OutOfStockException.java
 │   └── resources/
 │       ├── application.properties           # Konfiguration
-│       └── api-tests.http                   # API-Tests
+│       └── static/
+│           └── index.html                   # Web-Frontend
+├── api-tests.http                           # API-Tests
 └── test/
     └── java/
-        └── com/example/demo/
-            └── DemoApplicationTests.java    # Tests
+        └── com/library/
+            └── LibraryApplicationTests.java # Tests
 ```
 
 ## 🛠️ Technologien
 
-- **Java 19** - Programmiersprache
+- **Java 17+** - Programmiersprache
 - **Spring Boot 3.5.5** - Framework
 - **Spring Web** - REST API
 - **Spring DevTools** - Entwicklungstools
 - **Maven** - Build-Management
-- **Jakarta Annotations** - Annotationen
+- **HTML/CSS/JavaScript** - Web-Frontend
 
 ## 📈 Features im Detail
 
@@ -153,10 +188,24 @@ src/
 - Case-insensitive Suche
 - Suche in Titel, Autor (bei Büchern)
 
+### Kundenverwaltung
+- Vollständige CRUD-Operationen (Create, Read, Update, Delete)
+- Kontaktdaten: Name, E-Mail, Telefonnummer
+- Eindeutige Namen-Validierung
+- Strukturierte API-Responses mit Erfolgs-/Fehlermeldungen
+
 ### Ausleihsystem
 - Maximal 5 Medien pro Kunde
 - Automatische Bestandsverwaltung
+- Status-Tracking für alle Medien
 - Fehlerbehandlung bei nicht verfügbaren Medien
+
+### Web-Frontend
+- Vollständige interaktive Benutzeroberfläche
+- Tabbed-Interface mit verschiedenen Funktionsbereichen
+- Live-API-Tests und Datenvisualisierung
+- Responsive Design für mobile Geräte
+- Automatische Demo-Präsentationen
 
 ### Error Handling
 - **404 Not Found**: Medium/Kunde nicht gefunden
@@ -180,9 +229,3 @@ src/
 .\mvnw.cmd spring-boot:run
 ```
 
-### Hot Reload
-Spring DevTools aktiviert automatisches Neuladen bei Dateiänderungen während der Entwicklung.
-
-## 📄 Lizenz
-
-Dieses Projekt ist für Bildungszwecke erstellt worden.
