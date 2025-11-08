@@ -2,6 +2,15 @@
 
 Ein vollständiges Bibliotheksverwaltungssystem, entwickelt mit Spring Boot und Java.
 
+## 👥 Projektmitglieder
+- Ahmad Alsayad, se231310@ustp-students.at
+- Lukas Kirmann, se231312@ustp-students.at
+- Markus Fink, se231301@ustp-students.at
+- Pavle Kapetanovic, se231332@ustp-students.at
+
+*Studiengang: Smart Engineering, Jahrgang 2023  
+Fach: Technical English II*
+
 ## 🎯 Funktionen
 
 - **Medienverwaltung**: Bücher, DVDs und Magazine verwalten
