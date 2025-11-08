@@ -11,7 +11,12 @@ Ein vollständiges Bibliotheksverwaltungssystem, entwickelt mit Spring Boot und 
 *Studiengang: Smart Engineering, Jahrgang 2023  
 Fach: Technical English II*
 
-## 🎯 Funktionen
+## � Web-Interface
+**📱 Live-Demo der Anwendung**: [http://localhost:8080](http://localhost:8080)
+
+*Die Anwendung muss gestartet sein, um das Web-Interface zu nutzen.*
+
+## �🎯 Funktionen
 
 - **Medienverwaltung**: Bücher, DVDs und Magazine verwalten
 - **Suchfunktion**: Regex-basierte Suche nach Titel, Autor und ISBN

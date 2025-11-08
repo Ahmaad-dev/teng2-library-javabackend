@@ -9,7 +9,12 @@
 *Studiengang: Smart Engineering, Jahrgang 2023  
 Fach: Technical English II*
 
-## 🎯 **Hauptfunktionen**
+## � Web-Interface
+**📱 Live-Demo der Anwendung**: [http://localhost:8080](http://localhost:8080)
+
+*Die Anwendung muss gestartet sein, um das Web-Interface zu nutzen.*
+
+## �🎯 **Hauptfunktionen**
 
 ### 📚 **Medienverwaltung**
 - **Bücher, DVDs & Magazine** verwalten
