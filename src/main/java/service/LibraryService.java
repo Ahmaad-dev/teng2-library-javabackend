@@ -3,7 +3,8 @@ package service;
 import exception.ItemNotFoundException;
 import exception.OutOfStockException;
 import model.MediaItem;
-import model.Unterklassen.*;
+import model.*;
+import model.dto.CreateClientRequest;
 import repository.InMemoryDatabase;
 import org.springframework.stereotype.Service;
 
@@ -127,83 +128,157 @@ public class LibraryService {
     }
 
     private int countBorrowedCopies(UUID itemId) {
-        MediaItem item = findAnyMedia(itemId);
+        // Keine Notwendigkeit das Item zu laden, da wir nur die IDs vergleichen
         return (int) db.clients.values().stream()
                 .flatMap(client -> client.getBorrowedItems().stream())
                 .filter(borrowedItem -> borrowedItem.getId().equals(itemId))
                 .count();
     }
 
-    // ========================= Client Management =========================
+    // ====================== Client Management ======================
 
-    public Client createClient(String name, String email, String phone) {
-        // Validierung: Name darf nicht leer sein
-        if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Name ist erforderlich und darf nicht leer sein");
+    public Map<String, Object> createClient(CreateClientRequest request) {
+        Map<String, Object> response = new HashMap<>();
+        
+        try {
+            // Validierung
+            if (request.getName() == null || request.getName().trim().isEmpty()) {
+                response.put("success", false);
+                response.put("message", "Name ist erforderlich");
+                return response;
+            }
+
+            // Prüfung auf doppelte Namen (case-insensitive)
+            boolean nameExists = db.clients.values().stream()
+                    .anyMatch(client -> client.getName().equalsIgnoreCase(request.getName().trim()));
+            
+            if (nameExists) {
+                response.put("success", false);
+                response.put("message", "Ein Kunde mit diesem Namen existiert bereits");
+                return response;
+            }
+
+            // Client erstellen
+            Client newClient = new Client(
+                request.getName().trim(),
+                request.getEmail() != null ? request.getEmail().trim() : null,
+                request.getPhone() != null ? request.getPhone().trim() : null
+            );
+
+            db.clients.put(newClient.getId(), newClient);
+
+            response.put("success", true);
+            response.put("message", "Kunde wurde erfolgreich erstellt");
+            response.put("data", newClient);
+            
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Fehler beim Erstellen des Kunden: " + e.getMessage());
         }
-        
-        // Validierung: Name muss eindeutig sein
-        boolean nameExists = db.clients.values().stream()
-                .anyMatch(client -> client.getName().equalsIgnoreCase(name.trim()));
-        
-        if (nameExists) {
-            throw new IllegalArgumentException("Ein Kunde mit dem Namen '" + name.trim() + "' existiert bereits");
-        }
-        
-        Client client = new Client(name.trim(), email != null ? email.trim() : null, phone != null ? phone.trim() : null);
-        db.clients.put(client.getId(), client);
-        return client;
+
+        return response;
     }
 
-    public Client getClientById(UUID clientId) {
-        Client client = db.clients.get(clientId);
-        if (client == null) {
-            throw new ItemNotFoundException("Client mit ID " + clientId + " nicht gefunden");
-        }
-        return client;
-    }
-
-    public List<Client> getAllClients() {
-        return new ArrayList<>(db.clients.values());
-    }
-
-    public Client updateClient(UUID clientId, String name, String email, String phone) {
-        Client client = getClientById(clientId);
+    public Map<String, Object> getClientById(UUID clientId) {
+        Map<String, Object> response = new HashMap<>();
         
-        // Wenn Name geändert wird, prüfen ob neuer Name bereits existiert
-        if (name != null && !name.trim().isEmpty()) {
-            String newName = name.trim();
-            // Nur prüfen wenn sich der Name tatsächlich ändert
-            if (!client.getName().equalsIgnoreCase(newName)) {
+        try {
+            Client client = db.clients.get(clientId);
+            if (client == null) {
+                response.put("success", false);
+                response.put("message", "Kunde nicht gefunden");
+                return response;
+            }
+
+            response.put("success", true);
+            response.put("message", "Kunde gefunden");
+            response.put("data", client);
+            
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Fehler beim Abrufen des Kunden: " + e.getMessage());
+        }
+
+        return response;
+    }
+
+    public Map<String, Object> updateClient(UUID clientId, CreateClientRequest request) {
+        Map<String, Object> response = new HashMap<>();
+        
+        try {
+            Client client = db.clients.get(clientId);
+            if (client == null) {
+                response.put("success", false);
+                response.put("message", "Kunde nicht gefunden");
+                return response;
+            }
+
+            // Name aktualisieren (falls angegeben)
+            if (request.getName() != null && !request.getName().trim().isEmpty()) {
+                // Prüfung auf doppelte Namen (ausgenommen der aktuelle Client)
                 boolean nameExists = db.clients.values().stream()
-                        .anyMatch(c -> !c.getId().equals(clientId) && c.getName().equalsIgnoreCase(newName));
+                        .anyMatch(c -> !c.getId().equals(clientId) && 
+                                 c.getName().equalsIgnoreCase(request.getName().trim()));
                 
                 if (nameExists) {
-                    throw new IllegalArgumentException("Ein Kunde mit dem Namen '" + newName + "' existiert bereits");
+                    response.put("success", false);
+                    response.put("message", "Ein anderer Kunde mit diesem Namen existiert bereits");
+                    return response;
                 }
+                client.setName(request.getName().trim());
             }
-            client.setName(newName);
+
+            // E-Mail aktualisieren (falls angegeben)
+            if (request.getEmail() != null) {
+                client.setEmail(request.getEmail().trim());
+            }
+
+            // Telefon aktualisieren (falls angegeben)
+            if (request.getPhone() != null) {
+                client.setPhone(request.getPhone().trim());
+            }
+
+            response.put("success", true);
+            response.put("message", "Kunde wurde erfolgreich aktualisiert");
+            response.put("data", client);
+            
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Fehler beim Aktualisieren des Kunden: " + e.getMessage());
         }
-        
-        if (email != null && !email.trim().isEmpty()) {
-            client.setEmail(email.trim());
-        }
-        if (phone != null && !phone.trim().isEmpty()) {
-            client.setPhone(phone.trim());
-        }
-        
-        return client;
+
+        return response;
     }
 
-    public void deleteClient(UUID clientId) {
-        Client client = getClientById(clientId);
+    public Map<String, Object> deleteClient(UUID clientId) {
+        Map<String, Object> response = new HashMap<>();
         
-        // Prüfen ob noch Medien ausgeliehen sind
-        if (!client.getBorrowedItems().isEmpty()) {
-            throw new RuntimeException("Client kann nicht gelöscht werden - hat noch " + 
-                client.getBorrowedItems().size() + " Medien ausgeliehen");
+        try {
+            Client client = db.clients.get(clientId);
+            if (client == null) {
+                response.put("success", false);
+                response.put("message", "Kunde nicht gefunden");
+                return response;
+            }
+
+            // Prüfung, ob Kunde noch Medien ausgeliehen hat
+            if (!client.getBorrowedItems().isEmpty()) {
+                response.put("success", false);
+                response.put("message", "Kunde kann nicht gelöscht werden: " + 
+                           client.getBorrowedItems().size() + " Medien noch ausgeliehen");
+                return response;
+            }
+
+            db.clients.remove(clientId);
+
+            response.put("success", true);
+            response.put("message", "Kunde wurde erfolgreich gelöscht");
+            
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Fehler beim Löschen des Kunden: " + e.getMessage());
         }
-        
-        db.clients.remove(clientId);
+
+        return response;
     }
 }

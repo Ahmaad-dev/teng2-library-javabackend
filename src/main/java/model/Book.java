@@ -1,6 +1,4 @@
-package model.Unterklassen;
-
-import model.MediaItem;
+package model;
 
 public class Book extends MediaItem {
     private String author;

@@ -5,7 +5,6 @@ import model.MediaItem;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import model.MediaItem;
 
 public class Client {
     private UUID id;
@@ -14,12 +13,16 @@ public class Client {
     private String phone;
     private List<MediaItem> borrowedItems;
 
+    // Konstruktor mit nur Name (für Kompatibilität)
     public Client(String name) {
         this.id = UUID.randomUUID();
         this.name = name;
+        this.email = null;
+        this.phone = null;
         this.borrowedItems = new ArrayList<>();
     }
 
+    // Konstruktor mit allen Feldern
     public Client(String name, String email, String phone) {
         this.id = UUID.randomUUID();
         this.name = name;

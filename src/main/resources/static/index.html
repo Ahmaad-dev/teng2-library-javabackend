@@ -1531,8 +1531,9 @@
                 const data = await response.json();
 
                 if (data.success) {
+                    const client = data.data; // Korrekte Struktur: data.data anstelle von data.client
                     showResponse('clients-response', 
-                        `✅ ${data.message}\n\nKunden-Details:\nID: ${data.client.id}\nName: ${data.client.name}\nE-Mail: ${data.client.email || 'Nicht angegeben'}\nTelefon: ${data.client.phone || 'Nicht angegeben'}`, 
+                        `✅ ${data.message}\n\nKunden-Details:\nID: ${client.id}\nName: ${client.name}\nE-Mail: ${client.email || 'Nicht angegeben'}\nTelefon: ${client.phone || 'Nicht angegeben'}`, 
                         'success'
                     );
                     
@@ -1637,7 +1638,7 @@
                 const data = await response.json();
                 
                 if (data.success) {
-                    const client = data.client;
+                    const client = data.data; // Korrekte Struktur: data.data anstelle von data.client
                     let output = `🔍 ${data.message}\n\n`;
                     output += `Kunden-Details:\n`;
                     output += `ID: ${client.id}\n`;
@@ -1694,8 +1695,9 @@
                 const data = await response.json();
 
                 if (data.success) {
+                    const client = data.data; // Korrekte Struktur: data.data anstelle von data.client
                     showResponse('clients-response', 
-                        `✅ ${data.message}\n\nAktualisierte Daten:\nID: ${data.client.id}\nName: ${data.client.name}\nE-Mail: ${data.client.email || 'Nicht angegeben'}\nTelefon: ${data.client.phone || 'Nicht angegeben'}`, 
+                        `✅ ${data.message}\n\nAktualisierte Daten:\nID: ${client.id}\nName: ${client.name}\nE-Mail: ${client.email || 'Nicht angegeben'}\nTelefon: ${client.phone || 'Nicht angegeben'}`, 
                         'success'
                     );
                     
