@@ -10,11 +10,21 @@ import model.MediaItem;
 public class Client {
     private UUID id;
     private String name;
+    private String email;
+    private String phone;
     private List<MediaItem> borrowedItems;
 
     public Client(String name) {
         this.id = UUID.randomUUID();
         this.name = name;
+        this.borrowedItems = new ArrayList<>();
+    }
+
+    public Client(String name, String email, String phone) {
+        this.id = UUID.randomUUID();
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
         this.borrowedItems = new ArrayList<>();
     }
 
@@ -24,6 +34,26 @@ public class Client {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public List<MediaItem> getBorrowedItems() {
@@ -51,6 +81,8 @@ public class Client {
         return "Client{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
                 ", borrowedItems=" + borrowedItems +
                 '}';
     }

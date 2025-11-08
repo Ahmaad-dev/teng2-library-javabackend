@@ -55,12 +55,17 @@ public class InMemoryDatabase {
         addMagazine(new Magazine("PC Magazin", 2));
         addMagazine(new Magazine("LinuxUser", 4));
 
-        // Clients
-        addClient(new Client("Anna Meier"));
-        addClient(new Client("Thomas Huber"));
-        addClient(new Client("Lena Schmidt"));
-        addClient(new Client("Max Mustermann"));
-        addClient(new Client("Julia Berger"));
+        // Clients mit realistischen E-Mail-Adressen und Telefonnummern
+        addClient(new Client("Anna Meier", "anna.meier@email.de", "+49 30 12345678"));
+        addClient(new Client("Thomas Huber", "thomas.huber@gmail.com", "+49 89 87654321"));
+        addClient(new Client("Lena Schmidt", "lena.schmidt@web.de", "+49 40 11223344"));
+        addClient(new Client("Max Mustermann", "max.mustermann@example.com", "+49 69 55667788"));
+        addClient(new Client("Julia Berger", "julia.berger@yahoo.de", "+49 221 99887766"));
+        addClient(new Client("Stefan Wagner", "stefan.wagner@outlook.de", "+49 711 44332211"));
+        addClient(new Client("Maria Kaufmann", "maria.kaufmann@t-online.de", "+49 511 66778899"));
+        addClient(new Client("Daniel Klein", "daniel.klein@freenet.de", "+49 341 22446688"));
+        addClient(new Client("Sarah Hoffmann", "sarah.hoffmann@gmx.de", "+49 201 13579246"));
+        addClient(new Client("Michael Richter", "michael.richter@arcor.de", "+49 351 98765432"));
     }
 
     private void addBook(Book book) {

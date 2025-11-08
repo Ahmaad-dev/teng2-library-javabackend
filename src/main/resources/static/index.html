@@ -1,0 +1,1773 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System - Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 3px solid #e9ecef;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #495057;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tab:hover {
+            background: #e9ecef;
+        }
+
+        .nav-tab.active {
+            background: #007bff;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 5px solid #007bff;
+        }
+
+        .section h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        .response-container {
+            margin-top: 25px;
+            background: #2c3e50;
+            border-radius: 8px;
+            overflow: hidden;
+            border-left: 5px solid #3498db;
+        }
+
+        .response-container.success {
+            border-left-color: #27ae60;
+            background: #1e4b3a;
+        }
+
+        .response-container.error {
+            border-left-color: #e74c3c;
+            background: #4d1f20;
+        }
+
+        .response-container.warning {
+            border-left-color: #f39c12;
+            background: #4d3319;
+        }
+
+        .response-container.info {
+            border-left-color: #3498db;
+            background: #1e3a5f;
+        }
+
+        .response-header {
+            background: #34495e;
+            padding: 15px;
+            color: white;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .response-body {
+            padding: 20px;
+            color: #ecf0f1;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .status-success {
+            color: #2ecc71;
+        }
+
+        .status-error {
+            color: #e74c3c;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid #007bff;
+        }
+
+        .card h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .copy-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .copy-btn:hover {
+            background: #5a6268;
+        }
+
+        .loading {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .demo-flow {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .demo-step {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            border-left: 4px solid #fff;
+        }
+
+        .demo-step h4 {
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .clients-table {
+                font-size: 0.8rem;
+            }
+
+            .client-id code {
+                font-size: 0.7rem;
+                max-width: 80px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                display: inline-block;
+            }
+        }
+
+        /* Clients Table Styling */
+        .clients-table-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .table-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .table-header h3 {
+            margin: 0;
+            font-size: 1.3rem;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .clients-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        .clients-table th {
+            background: #f8f9fa;
+            padding: 15px 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            border-bottom: 2px solid #dee2e6;
+            font-size: 0.9rem;
+        }
+
+        .clients-table td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #e9ecef;
+            vertical-align: middle;
+        }
+
+        .clients-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .client-name strong {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .client-email a, .client-phone a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .client-email a:hover, .client-phone a:hover {
+            text-decoration: underline;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .status-available {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-borrowed {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .client-id {
+            position: relative;
+        }
+
+        .client-id code {
+            background: #f8f9fa;
+            padding: 5px 8px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            color: #495057;
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: inline-block;
+        }
+
+        .copy-id-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-left: 8px;
+            padding: 5px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .copy-id-btn:hover {
+            opacity: 1;
+            background: #e9ecef;
+        }
+
+        /* Schritt-für-Schritt Demo Styling */
+        #step-by-step-controls {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            border: none;
+        }
+
+        #demo-step-info {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border: 2px solid #cbd5e1;
+            border-left: 6px solid #4f46e5;
+        }
+
+        #demo-step-info h3 {
+            color: #1e293b;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+
+        #demo-step-info p {
+            color: #475569;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        #current-step-endpoint {
+            background: #1e293b !important;
+            color: #e2e8f0 !important;
+            font-family: 'Courier New', monospace;
+            font-weight: 500;
+            padding: 8px 12px !important;
+            border-radius: 6px !important;
+            font-size: 0.9rem;
+        }
+
+        #demo-loading {
+            background: rgba(79, 70, 229, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        #demo-progress {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        #demo-progress h4 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        #demo-progress-bar {
+            background: linear-gradient(90deg, #10b981, #06b6d4) !important;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn:disabled:hover {
+            transform: none !important;
+            box-shadow: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Library Management System</h1>
+            <p>Vollständige API-Demonstration der nächsten Generation</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('overview')">📊 Übersicht</button>
+            <button class="nav-tab" onclick="showTab('browse')">🔍 Durchsuchen</button>
+            <button class="nav-tab" onclick="showTab('borrow')">📖 Ausleihe</button>
+            <button class="nav-tab" onclick="showTab('clients')">👥 Kunden</button>
+            <button class="nav-tab" onclick="showTab('admin')">⚙️ Verwaltung</button>
+            <button class="nav-tab" onclick="showTab('demo')">🎯 Demo-Flow</button>
+        </div>
+
+        <!-- Übersicht Tab -->
+        <div id="overview" class="tab-content active">
+            <div class="demo-flow">
+                <h2>🚀 Willkommen zur Library Management System Demo!</h2>
+                <p>Dieses Frontend ermöglicht es, alle API-Endpoints zu testen und das komplette System zu demonstrieren.</p>
+            </div>
+
+            <div class="section">
+                <h3>📊 Datenübersicht - Alle Medien & Kunden anzeigen</h3>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="loadData('books')">📚 Alle Bücher laden</button>
+                    <button class="btn btn-success" onclick="loadData('dvds')">💿 Alle DVDs laden</button>
+                    <button class="btn btn-warning" onclick="loadData('magazines')">📰 Alle Magazine laden</button>
+                    <button class="btn btn-info" onclick="loadData('clients')">👥 Alle Kunden laden</button>
+                </div>
+                <div id="overview-response" class="response-container hidden">
+                    <div class="response-header">
+                        <span>API Response</span>
+                        <button class="copy-btn" onclick="copyResponse('overview-response')">📋 Kopieren</button>
+                    </div>
+                    <div id="overview-response-body" class="response-body"></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>🎯 Schnell-Tests</h3>
+                <div class="grid">
+                    <div class="card">
+                        <h4>🔍 Such-Test</h4>
+                        <button class="btn btn-primary" onclick="quickSearch()">Java-Bücher suchen</button>
+                    </div>
+                    <div class="card">
+                        <h4>📖 ISBN-Test</h4>
+                        <button class="btn btn-success" onclick="testISBN()">Buch per ISBN finden</button>
+                    </div>
+                    <div class="card">
+                        <h4>💿 DVD-Test</h4>
+                        <button class="btn btn-warning" onclick="searchMovies()">Matrix-DVDs suchen</button>
+                    </div>
+                    <div class="card">
+                        <h4>📊 Status-Test</h4>
+                        <button class="btn btn-info" onclick="testStatus()">System-Status prüfen</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Durchsuchen Tab -->
+        <div id="browse" class="tab-content">
+            <div class="section">
+                <h3>🔍 Erweiterte Suchfunktionen</h3>
+                
+                <div class="grid">
+                    <div class="card">
+                        <h4>📚 Bücher durchsuchen</h4>
+                        <div class="form-group">
+                            <label>Suchbegriff (Titel oder Autor):</label>
+                            <input type="text" id="book-search" placeholder="z.B. Java, Harry Potter, Tolkien">
+                        </div>
+                        <button class="btn btn-primary" onclick="searchBooks()">Bücher suchen</button>
+                    </div>
+
+                    <div class="card">
+                        <h4>💿 DVDs durchsuchen</h4>
+                        <div class="form-group">
+                            <label>Film-Titel:</label>
+                            <input type="text" id="dvd-search" placeholder="z.B. Matrix, Inception">
+                        </div>
+                        <button class="btn btn-success" onclick="searchDVDs()">DVDs suchen</button>
+                    </div>
+
+                    <div class="card">
+                        <h4>📰 Magazine durchsuchen</h4>
+                        <div class="form-group">
+                            <label>Magazin-Name:</label>
+                            <input type="text" id="magazine-search" placeholder="z.B. National Geographic">
+                        </div>
+                        <button class="btn btn-warning" onclick="searchMagazines()">Magazine suchen</button>
+                    </div>
+
+                    <div class="card">
+                        <h4>🔢 ISBN-Suche</h4>
+                        <div class="form-group">
+                            <label>ISBN-Nummer:</label>
+                            <input type="text" id="isbn-search" placeholder="z.B. 978-3608939811">
+                        </div>
+                        <button class="btn btn-info" onclick="searchByISBN()">Nach ISBN suchen</button>
+                    </div>
+                </div>
+
+                <div id="search-response" class="response-container hidden">
+                    <div class="response-header">
+                        <span>Suchergebnisse</span>
+                        <button class="copy-btn" onclick="copyResponse('search-response')">📋 Kopieren</button>
+                    </div>
+                    <div id="search-response-body" class="response-body"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ausleihe Tab -->
+        <div id="borrow" class="tab-content">
+            <div class="section">
+                <h3>📖 Ausleihe-System</h3>
+                
+                <div class="grid">
+                    <div class="card">
+                        <h4>👤 Kunden auswählen</h4>
+                        <div class="form-group">
+                            <label>Kunde:</label>
+                            <select id="client-select">
+                                <option value="">Zuerst Kunden laden...</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-info" onclick="loadClients()">Kunden laden</button>
+                    </div>
+
+                    <div class="card">
+                        <h4>📚 Medium auswählen</h4>
+                        <div class="form-group">
+                            <label>Medium-Typ:</label>
+                            <select id="media-type" onchange="loadMediaItems()">
+                                <option value="">Medium-Typ wählen</option>
+                                <option value="books">Bücher</option>
+                                <option value="dvds">DVDs</option>
+                                <option value="magazines">Magazine</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Medium:</label>
+                            <select id="media-select">
+                                <option value="">Zuerst Medium-Typ wählen...</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-success" onclick="borrowItem()">📖 Medium ausleihen</button>
+                    <button class="btn btn-danger" onclick="returnItem()">📤 Medium zurückgeben</button>
+                    <button class="btn btn-info" onclick="checkBorrowedItems()">📋 Ausgeliehene Medien anzeigen</button>
+                </div>
+
+                <div id="borrow-response" class="response-container hidden">
+                    <div class="response-header">
+                        <span>Ausleihe-Ergebnis</span>
+                        <button class="copy-btn" onclick="copyResponse('borrow-response')">📋 Kopieren</button>
+                    </div>
+                    <div id="borrow-response-body" class="response-body"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Verwaltung Tab -->
+        <div id="admin" class="tab-content">
+            <div class="section">
+                <h3>⚙️ Erweiterte Verwaltungsfunktionen</h3>
+                
+                <div class="grid">
+                    <div class="card">
+                        <h4>📊 Medium-Status prüfen</h4>
+                        <div class="form-group">
+                            <label>Medium-ID:</label>
+                            <input type="text" id="status-item-id" placeholder="Medium-UUID eingeben">
+                        </div>
+                        <div class="button-group">
+                            <button class="btn btn-info" onclick="checkItemStatus()">Status prüfen</button>
+                            <button class="btn btn-warning" onclick="checkAvailability()">Verfügbarkeit prüfen</button>
+                            <button class="btn btn-primary" onclick="checkBorrower()">Wer hat ausgeliehen?</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h4>👤 Kunden-Verwaltung</h4>
+                        <div class="form-group">
+                            <label>Kunden-ID:</label>
+                            <input type="text" id="client-id" placeholder="Kunden-UUID eingeben">
+                        </div>
+                        <button class="btn btn-success" onclick="getClientBorrowedItems()">Ausgeliehene Medien des Kunden</button>
+                    </div>
+
+                    <div class="card">
+                        <h4>🔄 Regex-Suche</h4>
+                        <div class="form-group">
+                            <label>Regex-Pattern:</label>
+                            <input type="text" id="regex-pattern" placeholder="z.B. .*Harry.*, Java.*">
+                        </div>
+                        <div class="form-group">
+                            <label>Suchbereich:</label>
+                            <select id="regex-type">
+                                <option value="books">Bücher</option>
+                                <option value="dvds">DVDs</option>
+                                <option value="magazines">Magazine</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-warning" onclick="regexSearch()">Regex-Suche ausführen</button>
+                    </div>
+
+                    <div class="card">
+                        <h4>🧪 Test alle Endpoints</h4>
+                        <button class="btn btn-primary" onclick="testAllEndpoints()">Vollständiger API-Test</button>
+                    </div>
+                </div>
+
+                <div id="admin-response" class="response-container hidden">
+                    <div class="response-header">
+                        <span>Verwaltungs-Ergebnis</span>
+                        <button class="copy-btn" onclick="copyResponse('admin-response')">📋 Kopieren</button>
+                    </div>
+                    <div id="admin-response-body" class="response-body"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kunden Tab -->
+        <div id="clients" class="tab-content">
+            <div class="section">
+                <h3>👥 Kunden-Verwaltung</h3>
+                <p class="section-desc">Neue Kunden erstellen und bestehende verwalten</p>
+
+                <div class="grid">
+                    <div class="card">
+                        <h4>➕ Neuen Kunden erstellen</h4>
+                        <div class="form-group">
+                            <label>Name:</label>
+                            <input type="text" id="new-client-name" placeholder="Vor- und Nachname eingeben">
+                        </div>
+                        <div class="form-group">
+                            <label>E-Mail:</label>
+                            <input type="email" id="new-client-email" placeholder="E-Mail-Adresse eingeben">
+                        </div>
+                        <div class="form-group">
+                            <label>Telefon:</label>
+                            <input type="tel" id="new-client-phone" placeholder="Telefonnummer eingeben">
+                        </div>
+                        <button class="btn btn-success" onclick="createClient()">Kunde erstellen</button>
+                    </div>
+
+                    <div class="card">
+                        <h4>📋 Alle Kunden anzeigen</h4>
+                        <button class="btn btn-info" onclick="loadAllClients()">Kundenliste laden</button>
+                    </div>
+
+                    <div class="card">
+                        <h4>🔍 Kunde suchen</h4>
+                        <div class="form-group">
+                            <label>Kunden-ID:</label>
+                            <input type="text" id="search-client-id" placeholder="UUID eingeben">
+                        </div>
+                        <button class="btn btn-primary" onclick="searchClient()">Kunde suchen</button>
+                    </div>
+
+                    <div class="card">
+                        <h4>✏️ Kunde bearbeiten</h4>
+                        <div class="form-group">
+                            <label>Kunden-ID:</label>
+                            <input type="text" id="edit-client-id" placeholder="UUID eingeben">
+                        </div>
+                        <div class="form-group">
+                            <label>Neuer Name:</label>
+                            <input type="text" id="edit-client-name" placeholder="Neuer Name (optional)">
+                        </div>
+                        <div class="form-group">
+                            <label>Neue E-Mail:</label>
+                            <input type="email" id="edit-client-email" placeholder="Neue E-Mail (optional)">
+                        </div>
+                        <div class="form-group">
+                            <label>Neue Telefon:</label>
+                            <input type="tel" id="edit-client-phone" placeholder="Neue Telefon (optional)">
+                        </div>
+                        <button class="btn btn-warning" onclick="updateClient()">Kunde aktualisieren</button>
+                    </div>
+
+                    <div class="card">
+                        <h4>🗑️ Kunde löschen</h4>
+                        <div class="form-group">
+                            <label>Kunden-ID:</label>
+                            <input type="text" id="delete-client-id" placeholder="UUID eingeben">
+                        </div>
+                        <button class="btn btn-danger" onclick="deleteClient()">Kunde löschen</button>
+                        <p class="small-text">⚠️ Kunde kann nur gelöscht werden, wenn keine Medien ausgeliehen sind</p>
+                    </div>
+                </div>
+
+                <div id="clients-response" class="response-container hidden">
+                    <div class="response-header">
+                        <span>Kunden-Management Ergebnis</span>
+                        <button class="copy-btn" onclick="copyResponse('clients-response')">📋 Kopieren</button>
+                    </div>
+                    <div id="clients-response-body" class="response-body"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo-Flow Tab -->
+        <div id="demo" class="tab-content">
+            <div class="section">
+                <h3>🎯 Automatische Demo-Präsentation</h3>
+                
+                <div class="demo-flow">
+                    <h3>📋 Demo-Ablauf</h3>
+                    <div class="demo-step">
+                        <h4>1. System-Überblick</h4>
+                        <p>Zeigt alle verfügbaren Medien und Kunden im System</p>
+                    </div>
+                    <div class="demo-step">
+                        <h4>2. Such-Funktionen</h4>
+                        <p>Demonstriert verschiedene Suchmöglichkeiten (Text, Regex, ISBN)</p>
+                    </div>
+                    <div class="demo-step">
+                        <h4>3. Ausleihe-Prozess</h4>
+                        <p>Vollständiger Workflow: Medium ausleihen → Status prüfen → Zurückgeben</p>
+                    </div>
+                    <div class="demo-step">
+                        <h4>4. Erweiterte Features</h4>
+                        <p>Status-Abfragen, Verfügbarkeits-Checks, Kunden-Management</p>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-success" onclick="startAutoDemo()">🎬 Automatische Demo starten</button>
+                    <button class="btn btn-primary" onclick="stepByStepDemo()">👆 Schritt-für-Schritt Demo</button>
+                    <button class="btn btn-warning" onclick="resetDemo()">🔄 Demo zurücksetzen</button>
+                </div>
+
+                <!-- Schritt-für-Schritt Demo Kontrollen -->
+                <div id="step-by-step-controls" class="section hidden">
+                    <h3>🎯 Schritt-für-Schritt Demo Steuerung</h3>
+                    <div class="button-group">
+                        <button id="prev-step-btn" class="btn btn-secondary" onclick="previousStep()" disabled>
+                            ◀️ Zurück
+                        </button>
+                        <button id="next-step-btn" class="btn btn-primary" onclick="nextStep()">
+                            ▶️ Weiter
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Aktueller Schritt Info -->
+                <div id="demo-step-info" class="section hidden">
+                    <h3 id="current-step-title">Schritt wird geladen...</h3>
+                    <p id="current-step-description">Beschreibung wird geladen...</p>
+                    <div style="margin-top: 15px;">
+                        <strong>🔗 API-Endpoint:</strong> 
+                        <code id="current-step-endpoint" style="background: #f8f9fa; padding: 4px 8px; border-radius: 4px; color: #333;">-</code>
+                    </div>
+                    
+                    <!-- Ladeanzeige -->
+                    <div id="demo-loading" class="hidden" style="text-align: center; margin: 20px 0;">
+                        <div class="loading">🔄</div>
+                        <p style="margin-top: 10px; font-weight: 500;">Führe Schritt aus...</p>
+                    </div>
+                </div>
+
+                <div id="demo-progress" class="hidden">
+                    <h4>Demo-Fortschritt: <span id="demo-step-counter">0/8</span></h4>
+                    <div style="background: #e9ecef; height: 10px; border-radius: 5px; margin: 10px 0;">
+                        <div id="demo-progress-bar" style="background: #007bff; height: 100%; border-radius: 5px; width: 0%; transition: width 0.3s ease;"></div>
+                    </div>
+                </div>
+
+                <div id="demo-response" class="response-container hidden">
+                    <div class="response-header">
+                        <span id="demo-title">Demo-Ergebnis</span>
+                        <button class="copy-btn" onclick="copyResponse('demo-response')">📋 Kopieren</button>
+                    </div>
+                    <div id="demo-response-body" class="response-body"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080/api';
+        let currentClients = [];
+        let currentMedia = [];
+        let demoStep = 0;
+        let demoInterval;
+
+        // Tab Navigation
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // API Call Helper
+        async function makeAPICall(endpoint, method = 'GET', body = null) {
+            try {
+                const options = {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                };
+                
+                if (body) {
+                    options.body = JSON.stringify(body);
+                }
+
+                const response = await fetch(`${API_BASE}${endpoint}`, options);
+                const data = await response.text();
+                
+                let parsedData;
+                try {
+                    parsedData = JSON.parse(data);
+                } catch {
+                    parsedData = data;
+                }
+
+                return {
+                    status: response.status,
+                    statusText: response.statusText,
+                    data: parsedData,
+                    success: response.ok
+                };
+            } catch (error) {
+                return {
+                    status: 0,
+                    statusText: 'Network Error',
+                    data: error.message,
+                    success: false
+                };
+            }
+        }
+
+        // Display Response
+        function displayResponse(containerId, response, title = 'API Response') {
+            const container = document.getElementById(containerId);
+            const header = container.querySelector('.response-header span');
+            const body = container.querySelector('.response-body');
+            
+            header.textContent = title;
+            
+            const statusClass = response.success ? 'status-success' : 'status-error';
+            
+            body.innerHTML = `
+                <div class="${statusClass}">
+                    <strong>Status:</strong> ${response.status} ${response.statusText}
+                </div>
+                <br>
+                <strong>Response:</strong><br>
+                <pre>${JSON.stringify(response.data, null, 2)}</pre>
+            `;
+            
+            container.classList.remove('hidden');
+            container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Copy Response
+        function copyResponse(containerId) {
+            const body = document.querySelector(`#${containerId} .response-body pre`);
+            if (body) {
+                navigator.clipboard.writeText(body.textContent);
+                const btn = document.querySelector(`#${containerId} .copy-btn`);
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Kopiert!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            }
+        }
+
+        // Overview Tab Functions
+        async function loadData(type) {
+            const response = await makeAPICall(`/${type}`);
+            displayResponse('overview-response', response, `${type.charAt(0).toUpperCase() + type.slice(1)} geladen`);
+            
+            if (response.success && type === 'clients') {
+                currentClients = Array.isArray(response.data) ? response.data : [];
+                updateClientSelect();
+            }
+        }
+
+        async function quickSearch() {
+            const response = await makeAPICall('/books/search?query=Java');
+            displayResponse('overview-response', response, 'Java-Bücher gefunden');
+        }
+
+        async function testISBN() {
+            const response = await makeAPICall('/books/isbn/978-3608939811');
+            displayResponse('overview-response', response, 'Buch per ISBN gefunden');
+        }
+
+        async function searchMovies() {
+            const response = await makeAPICall('/dvds/search?query=Matrix');
+            displayResponse('overview-response', response, 'Matrix-DVDs gefunden');
+        }
+
+        async function testStatus() {
+            const booksResponse = await makeAPICall('/books');
+            if (booksResponse.success && Array.isArray(booksResponse.data) && booksResponse.data.length > 0) {
+                const firstBook = booksResponse.data[0];
+                const statusResponse = await makeAPICall(`/items/${firstBook.id}/status`);
+                displayResponse('overview-response', statusResponse, 'Medium-Status geprüft');
+            } else {
+                displayResponse('overview-response', { success: false, status: 404, statusText: 'No Data', data: 'Keine Bücher gefunden für Status-Test' });
+            }
+        }
+
+        // Browse Tab Functions
+        async function searchBooks() {
+            const query = document.getElementById('book-search').value || 'Java';
+            const response = await makeAPICall(`/books/search?query=${encodeURIComponent(query)}`);
+            displayResponse('search-response', response, `Bücher-Suche: "${query}"`);
+        }
+
+        async function searchDVDs() {
+            const query = document.getElementById('dvd-search').value || 'Matrix';
+            const response = await makeAPICall(`/dvds/search?query=${encodeURIComponent(query)}`);
+            displayResponse('search-response', response, `DVD-Suche: "${query}"`);
+        }
+
+        async function searchMagazines() {
+            const query = document.getElementById('magazine-search').value || 'National';
+            const response = await makeAPICall(`/magazines/search?query=${encodeURIComponent(query)}`);
+            displayResponse('search-response', response, `Magazin-Suche: "${query}"`);
+        }
+
+        async function searchByISBN() {
+            const isbn = document.getElementById('isbn-search').value || '978-3608939811';
+            const response = await makeAPICall(`/books/isbn/${isbn}`);
+            displayResponse('search-response', response, `ISBN-Suche: ${isbn}`);
+        }
+
+        // Borrow Tab Functions
+        async function loadClients() {
+            const response = await makeAPICall('/clients');
+            if (response.success) {
+                currentClients = Array.isArray(response.data) ? response.data : [];
+                updateClientSelect();
+                displayResponse('borrow-response', response, 'Kunden geladen');
+            }
+        }
+
+        function updateClientSelect() {
+            const select = document.getElementById('client-select');
+            select.innerHTML = '<option value="">Kunde auswählen...</option>';
+            
+            currentClients.forEach(client => {
+                const option = document.createElement('option');
+                option.value = client.id;
+                option.textContent = `${client.name} (${client.email})`;
+                select.appendChild(option);
+            });
+        }
+
+        async function loadMediaItems() {
+            const type = document.getElementById('media-type').value;
+            if (!type) return;
+            
+            const response = await makeAPICall(`/${type}`);
+            if (response.success) {
+                currentMedia = Array.isArray(response.data) ? response.data : [];
+                updateMediaSelect();
+            }
+        }
+
+        function updateMediaSelect() {
+            const select = document.getElementById('media-select');
+            select.innerHTML = '<option value="">Medium auswählen...</option>';
+            
+            currentMedia.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.id;
+                option.textContent = `${item.title} ${item.author ? '- ' + item.author : ''} (${item.copiesAvailable} verfügbar)`;
+                select.appendChild(option);
+            });
+        }
+
+        async function borrowItem() {
+            const clientId = document.getElementById('client-select').value;
+            const itemId = document.getElementById('media-select').value;
+            
+            if (!clientId || !itemId) {
+                alert('Bitte wählen Sie sowohl einen Kunden als auch ein Medium aus.');
+                return;
+            }
+            
+            const response = await makeAPICall(`/clients/${clientId}/borrow/${itemId}`, 'POST');
+            displayResponse('borrow-response', response, 'Ausleihe-Versuch');
+        }
+
+        async function returnItem() {
+            const clientId = document.getElementById('client-select').value;
+            const itemId = document.getElementById('media-select').value;
+            
+            if (!clientId || !itemId) {
+                alert('Bitte wählen Sie sowohl einen Kunden als auch ein Medium aus.');
+                return;
+            }
+            
+            const response = await makeAPICall(`/clients/${clientId}/return/${itemId}`, 'POST');
+            displayResponse('borrow-response', response, 'Rückgabe-Versuch');
+        }
+
+        async function checkBorrowedItems() {
+            const clientId = document.getElementById('client-select').value;
+            
+            if (!clientId) {
+                alert('Bitte wählen Sie einen Kunden aus.');
+                return;
+            }
+            
+            const response = await makeAPICall(`/clients/${clientId}/borrowed-items`);
+            displayResponse('borrow-response', response, 'Ausgeliehene Medien');
+        }
+
+        // Admin Tab Functions
+        async function checkItemStatus() {
+            const itemId = document.getElementById('status-item-id').value;
+            if (!itemId) {
+                alert('Bitte geben Sie eine Medium-ID ein.');
+                return;
+            }
+            
+            const response = await makeAPICall(`/items/${itemId}/status`);
+            displayResponse('admin-response', response, 'Medium-Status');
+        }
+
+        async function checkAvailability() {
+            const itemId = document.getElementById('status-item-id').value;
+            if (!itemId) {
+                alert('Bitte geben Sie eine Medium-ID ein.');
+                return;
+            }
+            
+            const response = await makeAPICall(`/items/${itemId}/availability`);
+            displayResponse('admin-response', response, 'Verfügbarkeit');
+        }
+
+        async function checkBorrower() {
+            const itemId = document.getElementById('status-item-id').value;
+            if (!itemId) {
+                alert('Bitte geben Sie eine Medium-ID ein.');
+                return;
+            }
+            
+            const response = await makeAPICall(`/items/${itemId}/borrower`);
+            displayResponse('admin-response', response, 'Ausleih-Information');
+        }
+
+        async function getClientBorrowedItems() {
+            const clientId = document.getElementById('client-id').value;
+            if (!clientId) {
+                alert('Bitte geben Sie eine Kunden-ID ein.');
+                return;
+            }
+            
+            const response = await makeAPICall(`/clients/${clientId}/borrowed-items`);
+            displayResponse('admin-response', response, 'Kunden-Ausleihen');
+        }
+
+        async function regexSearch() {
+            const pattern = document.getElementById('regex-pattern').value;
+            const type = document.getElementById('regex-type').value;
+            
+            if (!pattern) {
+                alert('Bitte geben Sie ein Regex-Pattern ein.');
+                return;
+            }
+            
+            const response = await makeAPICall(`/${type}/search?query=${encodeURIComponent(pattern)}`);
+            displayResponse('admin-response', response, `Regex-Suche in ${type}: ${pattern}`);
+        }
+
+        async function testAllEndpoints() {
+            const endpoints = [
+                { url: '/books', name: 'Alle Bücher' },
+                { url: '/clients', name: 'Alle Kunden' },
+                { url: '/dvds', name: 'Alle DVDs' },
+                { url: '/magazines', name: 'Alle Magazine' },
+                { url: '/books/search?query=Java', name: 'Bücher-Suche' },
+                { url: '/dvds/search?query=Matrix', name: 'DVD-Suche' },
+                { url: '/books/isbn/978-3608939811', name: 'ISBN-Suche' }
+            ];
+            
+            let results = [];
+            
+            for (const endpoint of endpoints) {
+                const response = await makeAPICall(endpoint.url);
+                results.push({
+                    name: endpoint.name,
+                    url: endpoint.url,
+                    status: response.status,
+                    success: response.success
+                });
+            }
+            
+            displayResponse('admin-response', { success: true, status: 200, statusText: 'OK', data: results }, 'Vollständiger API-Test');
+        }
+
+        // Demo Functions
+        const demoStepsData = [
+            {
+                title: "🚀 Demo gestartet",
+                description: "Willkommen zur interaktiven Library Management System Demo!",
+                action: () => initializeDemo(),
+                endpoint: "Demo-Start"
+            },
+            {
+                title: "📚 Schritt 1: Bücher laden",
+                description: "Lade alle verfügbaren Bücher aus der Datenbank",
+                action: () => loadData('books'),
+                endpoint: "GET /api/books"
+            },
+            {
+                title: "👥 Schritt 2: Kunden laden",
+                description: "Lade alle registrierten Kunden",
+                action: () => loadData('clients'),
+                endpoint: "GET /api/clients"
+            },
+            {
+                title: "💿 Schritt 3: DVDs laden",
+                description: "Lade alle verfügbaren DVDs",
+                action: () => loadData('dvds'),
+                endpoint: "GET /api/dvds"
+            },
+            {
+                title: "📰 Schritt 4: Magazine laden",
+                description: "Lade alle verfügbaren Magazine",
+                action: () => loadData('magazines'),
+                endpoint: "GET /api/magazines"
+            },
+            {
+                title: "🔍 Schritt 5: Suche testen",
+                description: "Teste die Suchfunktion mit 'Java'-Büchern",
+                action: () => quickSearch(),
+                endpoint: "GET /api/books/search?query=Java"
+            },
+            {
+                title: "📖 Schritt 6: ISBN-Suche",
+                description: "Finde ein Buch anhand der ISBN-Nummer",
+                action: () => testISBN(),
+                endpoint: "GET /api/books/isbn/978-3608939811"
+            },
+            {
+                title: "🎬 Schritt 7: Film-Suche",
+                description: "Suche nach Matrix-DVDs",
+                action: () => searchMovies(),
+                endpoint: "GET /api/dvds/search?query=Matrix"
+            },
+            {
+                title: "🔄 Schritt 8: Ausleihe-Test",
+                description: "Führe eine Test-Ausleihe durch",
+                action: () => performDemoLoan(),
+                endpoint: "POST /api/clients/{id}/borrow/{itemId}"
+            },
+            {
+                title: "📊 Schritt 9: Status prüfen",
+                description: "Prüfe den Status eines Mediums",
+                action: () => testStatus(),
+                endpoint: "GET /api/items/{id}/status"
+            },
+            {
+                title: "🎉 Demo abgeschlossen!",
+                description: "Alle API-Endpoints wurden erfolgreich getestet",
+                action: () => finishDemo(),
+                endpoint: "Demo beendet"
+            }
+        ];
+
+        async function startAutoDemo() {
+            demoStep = 0;
+            updateDemoProgress();
+            document.getElementById('demo-progress').classList.remove('hidden');
+            
+            const demoSteps = [
+                () => loadData('books'),
+                () => loadData('clients'),
+                () => quickSearch(),
+                () => testISBN(),
+                () => searchMovies(),
+                () => testStatus(),
+                () => performDemoLoan(),
+                () => finishDemo()
+            ];
+            
+            demoInterval = setInterval(async () => {
+                if (demoStep < demoSteps.length) {
+                    await demoSteps[demoStep]();
+                    demoStep++;
+                    updateDemoProgress();
+                } else {
+                    clearInterval(demoInterval);
+                }
+            }, 3000);
+        }
+
+        async function stepByStepDemo() {
+            demoStep = 0;
+            document.getElementById('demo-progress').classList.remove('hidden');
+            document.getElementById('step-by-step-controls').classList.remove('hidden');
+            document.getElementById('demo-step-info').classList.remove('hidden');
+            
+            updateStepInfo();
+            updateDemoProgress();
+            
+            // Führe ersten Schritt aus
+            await executeCurrentStep();
+        }
+
+        async function nextStep() {
+            if (demoStep < demoStepsData.length - 1) {
+                demoStep++;
+                updateStepInfo();
+                updateDemoProgress();
+                await executeCurrentStep();
+            } else {
+                finishStepByStepDemo();
+            }
+        }
+
+        async function previousStep() {
+            if (demoStep > 0) {
+                demoStep--;
+                updateStepInfo();
+                updateDemoProgress();
+                await executeCurrentStep();
+            }
+        }
+
+        async function executeCurrentStep() {
+            const currentStepData = demoStepsData[demoStep];
+            
+            // Zeige Ladeanzeige
+            document.getElementById('demo-loading').classList.remove('hidden');
+            
+            try {
+                await currentStepData.action();
+                document.getElementById('demo-loading').classList.add('hidden');
+                
+                // Update next button text
+                const nextBtn = document.getElementById('next-step-btn');
+                if (demoStep === demoStepsData.length - 1) {
+                    nextBtn.textContent = '🏁 Demo beenden';
+                    nextBtn.className = 'btn btn-success';
+                } else {
+                    nextBtn.textContent = '▶️ Weiter';
+                    nextBtn.className = 'btn btn-primary';
+                }
+                
+            } catch (error) {
+                document.getElementById('demo-loading').classList.add('hidden');
+                displayResponse('demo-response', { 
+                    success: false, 
+                    status: 0, 
+                    statusText: 'Error', 
+                    data: `Fehler in Schritt ${demoStep + 1}: ${error.message}` 
+                }, 'Fehler');
+            }
+        }
+
+        function updateStepInfo() {
+            const currentStepData = demoStepsData[demoStep];
+            document.getElementById('current-step-title').textContent = currentStepData.title;
+            document.getElementById('current-step-description').textContent = currentStepData.description;
+            document.getElementById('current-step-endpoint').textContent = currentStepData.endpoint;
+            
+            // Update previous button state
+            const prevBtn = document.getElementById('prev-step-btn');
+            prevBtn.disabled = demoStep === 0;
+            prevBtn.className = demoStep === 0 ? 'btn btn-secondary' : 'btn btn-warning';
+        }
+
+        function finishStepByStepDemo() {
+            document.getElementById('step-by-step-controls').classList.add('hidden');
+            document.getElementById('demo-step-info').classList.add('hidden');
+            
+            displayResponse('demo-response', { 
+                success: true, 
+                status: 200, 
+                statusText: 'Demo Complete', 
+                data: '🎉 Schritt-für-Schritt Demo erfolgreich abgeschlossen!\n\n✅ Alle API-Endpoints wurden getestet\n✅ Suchfunktionen demonstriert\n✅ Ausleihe-System getestet\n✅ Status-Abfragen durchgeführt' 
+            }, 'Demo erfolgreich abgeschlossen');
+        }
+
+        async function initializeDemo() {
+            displayResponse('demo-response', { 
+                success: true, 
+                status: 200, 
+                statusText: 'Demo Started', 
+                data: 'Demo wird initialisiert... Bereit für die Präsentation!' 
+            }, 'Demo gestartet');
+        }
+
+        async function performDemoLoan() {
+            // Lade zuerst Kunden und Bücher falls nicht vorhanden
+            if (currentClients.length === 0) {
+                await loadData('clients');
+            }
+            
+            const booksResponse = await makeAPICall('/books');
+            if (booksResponse.success && Array.isArray(booksResponse.data) && booksResponse.data.length > 0 && currentClients.length > 0) {
+                const client = currentClients[0];
+                const book = booksResponse.data[0];
+                
+                const borrowResponse = await makeAPICall(`/clients/${client.id}/borrow/${book.id}`, 'POST');
+                displayResponse('demo-response', borrowResponse, `Demo-Ausleihe: ${book.title} an ${client.name}`);
+                
+                // Speichere für mögliche Rückgabe
+                window.lastBorrowedItem = { clientId: client.id, itemId: book.id, title: book.title, clientName: client.name };
+            } else {
+                displayResponse('demo-response', { 
+                    success: false, 
+                    status: 404, 
+                    statusText: 'No Data', 
+                    data: 'Keine Bücher oder Kunden für Demo-Ausleihe gefunden' 
+                }, 'Demo-Ausleihe fehlgeschlagen');
+            }
+        }
+
+        function finishDemo() {
+            displayResponse('demo-response', { 
+                success: true, 
+                status: 200, 
+                statusText: 'Demo Complete', 
+                data: '🎉 Demo erfolgreich abgeschlossen!\n\n✨ Alle Endpoints wurden getestet:\n• GET /api/books\n• GET /api/clients\n• GET /api/dvds\n• GET /api/magazines\n• GET /api/books/search\n• GET /api/dvds/search\n• GET /api/books/isbn\n• POST /api/clients/{id}/borrow/{itemId}\n• GET /api/items/{id}/status\n\n🚀 System ist vollständig funktionsfähig!' 
+            }, 'Demo abgeschlossen');
+        }
+
+        function updateDemoProgress() {
+            const counter = document.getElementById('demo-step-counter');
+            const bar = document.getElementById('demo-progress-bar');
+            
+            const totalSteps = demoStepsData.length;
+            counter.textContent = `${demoStep + 1}/${totalSteps}`;
+            bar.style.width = `${((demoStep + 1) / totalSteps) * 100}%`;
+        }
+
+        function resetDemo() {
+            clearInterval(demoInterval);
+            demoStep = 0;
+            updateDemoProgress();
+            document.getElementById('demo-progress').classList.add('hidden');
+            document.getElementById('step-by-step-controls').classList.add('hidden');
+            document.getElementById('demo-step-info').classList.add('hidden');
+            document.getElementById('demo-response').classList.add('hidden');
+            document.getElementById('demo-loading').classList.add('hidden');
+        }
+
+        // Initial load
+        window.addEventListener('load', () => {
+            console.log('🚀 Library Management System Frontend geladen');
+            console.log('💡 Bereit für API-Tests und Präsentationen');
+        });
+
+        // ========================= HELPER FUNCTIONS =========================
+
+        function showResponse(containerId, message, type = 'info') {
+            const container = document.getElementById(containerId);
+            const responseBody = document.getElementById(containerId.replace('response', 'response-body'));
+            
+            if (!container || !responseBody) {
+                console.error('Response container not found:', containerId);
+                return;
+            }
+
+            // Set message content
+            responseBody.textContent = message;
+            
+            // Remove existing type classes
+            container.classList.remove('success', 'error', 'info', 'warning');
+            
+            // Add new type class
+            container.classList.add(type);
+            
+            // Show container
+            container.classList.remove('hidden');
+            
+            // Auto-scroll to response
+            container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // ========================= CLIENT MANAGEMENT FUNCTIONS =========================
+
+        async function createClient() {
+            const name = document.getElementById('new-client-name').value.trim();
+            const email = document.getElementById('new-client-email').value.trim();
+            const phone = document.getElementById('new-client-phone').value.trim();
+
+            if (!name) {
+                showResponse('clients-response', '❌ Fehler: Name ist erforderlich', 'error');
+                return;
+            }
+
+            const clientData = { name, email, phone };
+
+            try {
+                const response = await fetch('/api/clients', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(clientData)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showResponse('clients-response', 
+                        `✅ ${data.message}\n\nKunden-Details:\nID: ${data.client.id}\nName: ${data.client.name}\nE-Mail: ${data.client.email || 'Nicht angegeben'}\nTelefon: ${data.client.phone || 'Nicht angegeben'}`, 
+                        'success'
+                    );
+                    
+                    // Form reset
+                    document.getElementById('new-client-name').value = '';
+                    document.getElementById('new-client-email').value = '';
+                    document.getElementById('new-client-phone').value = '';
+                } else {
+                    showResponse('clients-response', `❌ ${data.message}`, 'error');
+                }
+            } catch (error) {
+                showResponse('clients-response', `❌ Netzwerkfehler: ${error.message}`, 'error');
+            }
+        }
+
+        async function loadAllClients() {
+            try {
+                const response = await fetch('/api/clients');
+                const result = await response.json();
+                
+                // Handle both direct array and structured response
+                const clients = Array.isArray(result) ? result : (result.data || []);
+                
+                if (clients.length === 0) {
+                    showResponse('clients-response', '📝 Keine Kunden gefunden.', 'info');
+                    return;
+                }
+
+                // Create a beautiful table HTML
+                let tableHTML = `
+                    <div class="clients-table-container">
+                        <div class="table-header">
+                            <h3>📋 Kundenliste (${clients.length} Kunden)</h3>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="clients-table">
+                                <thead>
+                                    <tr>
+                                        <th>👤 Name</th>
+                                        <th>📧 E-Mail</th>
+                                        <th>📞 Telefon</th>
+                                        <th>📚 Ausgeliehen</th>
+                                        <th>🆔 ID</th>
+                                    </tr>
+                                </thead>
+                                <tbody>`;
+
+                clients.forEach(client => {
+                    const borrowedCount = client.borrowedItems?.length || 0;
+                    const statusClass = borrowedCount > 0 ? 'status-borrowed' : 'status-available';
+                    const statusText = borrowedCount > 0 ? `${borrowedCount} Medien` : 'Keine';
+                    
+                    tableHTML += `
+                        <tr>
+                            <td class="client-name">
+                                <strong>${client.name}</strong>
+                            </td>
+                            <td class="client-email">
+                                <a href="mailto:${client.email || ''}">${client.email || 'Nicht angegeben'}</a>
+                            </td>
+                            <td class="client-phone">
+                                <a href="tel:${client.phone || ''}">${client.phone || 'Nicht angegeben'}</a>
+                            </td>
+                            <td class="client-borrowed">
+                                <span class="status-badge ${statusClass}">${statusText}</span>
+                            </td>
+                            <td class="client-id">
+                                <code>${client.id}</code>
+                                <button class="copy-id-btn" onclick="copyToClipboard('${client.id}')" title="ID kopieren">📋</button>
+                            </td>
+                        </tr>`;
+                });
+
+                tableHTML += `
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>`;
+
+                // Display the table
+                document.getElementById('clients-response').classList.remove('hidden');
+                document.getElementById('clients-response-body').innerHTML = tableHTML;
+                
+                // Scroll to response
+                document.getElementById('clients-response').scrollIntoView({ behavior: 'smooth' });
+                
+            } catch (error) {
+                showResponse('clients-response', `❌ Fehler beim Laden: ${error.message}`, 'error');
+            }
+        }
+
+        async function searchClient() {
+            const clientId = document.getElementById('search-client-id').value.trim();
+            
+            if (!clientId) {
+                showResponse('clients-response', '❌ Fehler: Kunden-ID ist erforderlich', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/clients/${clientId}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const client = data.client;
+                    let output = `🔍 ${data.message}\n\n`;
+                    output += `Kunden-Details:\n`;
+                    output += `ID: ${client.id}\n`;
+                    output += `Name: ${client.name}\n`;
+                    output += `E-Mail: ${client.email || 'Nicht angegeben'}\n`;
+                    output += `Telefon: ${client.phone || 'Nicht angegeben'}\n`;
+                    output += `Ausgeliehene Medien: ${client.borrowedItems?.length || 0}\n`;
+                    
+                    if (client.borrowedItems && client.borrowedItems.length > 0) {
+                        output += '\nAusgeliehene Medien:\n';
+                        client.borrowedItems.forEach(item => {
+                            output += `- ${item.title} (ID: ${item.id})\n`;
+                        });
+                    }
+                    
+                    showResponse('clients-response', output, 'success');
+                } else {
+                    showResponse('clients-response', `❌ ${data.message}`, 'error');
+                }
+            } catch (error) {
+                showResponse('clients-response', `❌ Netzwerkfehler: ${error.message}`, 'error');
+            }
+        }
+
+        async function updateClient() {
+            const clientId = document.getElementById('edit-client-id').value.trim();
+            const name = document.getElementById('edit-client-name').value.trim();
+            const email = document.getElementById('edit-client-email').value.trim();
+            const phone = document.getElementById('edit-client-phone').value.trim();
+
+            if (!clientId) {
+                showResponse('clients-response', '❌ Fehler: Kunden-ID ist erforderlich', 'error');
+                return;
+            }
+
+            // Nur ausgefüllte Felder senden
+            const updateData = {};
+            if (name) updateData.name = name;
+            if (email) updateData.email = email;
+            if (phone) updateData.phone = phone;
+
+            if (Object.keys(updateData).length === 0) {
+                showResponse('clients-response', '❌ Fehler: Mindestens ein Feld muss ausgefüllt werden', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/clients/${clientId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updateData)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showResponse('clients-response', 
+                        `✅ ${data.message}\n\nAktualisierte Daten:\nID: ${data.client.id}\nName: ${data.client.name}\nE-Mail: ${data.client.email || 'Nicht angegeben'}\nTelefon: ${data.client.phone || 'Nicht angegeben'}`, 
+                        'success'
+                    );
+                    
+                    // Form reset
+                    document.getElementById('edit-client-id').value = '';
+                    document.getElementById('edit-client-name').value = '';
+                    document.getElementById('edit-client-email').value = '';
+                    document.getElementById('edit-client-phone').value = '';
+                } else {
+                    showResponse('clients-response', `❌ ${data.message}`, 'error');
+                }
+            } catch (error) {
+                showResponse('clients-response', `❌ Netzwerkfehler: ${error.message}`, 'error');
+            }
+        }
+
+        async function deleteClient() {
+            const clientId = document.getElementById('delete-client-id').value.trim();
+            
+            if (!clientId) {
+                showResponse('clients-response', '❌ Fehler: Kunden-ID ist erforderlich', 'error');
+                return;
+            }
+
+            if (!confirm('Sind Sie sicher, dass Sie diesen Kunden löschen möchten?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/clients/${clientId}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showResponse('clients-response', `✅ ${data.message}`, 'success');
+                    document.getElementById('delete-client-id').value = '';
+                } else {
+                    showResponse('clients-response', `❌ ${data.message}`, 'error');
+                }
+            } catch (error) {
+                showResponse('clients-response', `❌ Netzwerkfehler: ${error.message}`, 'error');
+            }
+        }
+
+        // Helper function to copy text to clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                // Show brief success feedback
+                const tempMsg = document.createElement('div');
+                tempMsg.textContent = '✅ ID kopiert!';
+                tempMsg.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: #28a745;
+                    color: white;
+                    padding: 10px 15px;
+                    border-radius: 5px;
+                    z-index: 9999;
+                    font-size: 0.9rem;
+                    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+                `;
+                document.body.appendChild(tempMsg);
+                setTimeout(() => {
+                    document.body.removeChild(tempMsg);
+                }, 2000);
+            }).catch(function(err) {
+                console.error('Fehler beim Kopieren: ', err);
+            });
+        }
+    </script>
+</body>
+</html>

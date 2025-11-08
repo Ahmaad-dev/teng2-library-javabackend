@@ -133,4 +133,77 @@ public class LibraryService {
                 .filter(borrowedItem -> borrowedItem.getId().equals(itemId))
                 .count();
     }
+
+    // ========================= Client Management =========================
+
+    public Client createClient(String name, String email, String phone) {
+        // Validierung: Name darf nicht leer sein
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Name ist erforderlich und darf nicht leer sein");
+        }
+        
+        // Validierung: Name muss eindeutig sein
+        boolean nameExists = db.clients.values().stream()
+                .anyMatch(client -> client.getName().equalsIgnoreCase(name.trim()));
+        
+        if (nameExists) {
+            throw new IllegalArgumentException("Ein Kunde mit dem Namen '" + name.trim() + "' existiert bereits");
+        }
+        
+        Client client = new Client(name.trim(), email != null ? email.trim() : null, phone != null ? phone.trim() : null);
+        db.clients.put(client.getId(), client);
+        return client;
+    }
+
+    public Client getClientById(UUID clientId) {
+        Client client = db.clients.get(clientId);
+        if (client == null) {
+            throw new ItemNotFoundException("Client mit ID " + clientId + " nicht gefunden");
+        }
+        return client;
+    }
+
+    public List<Client> getAllClients() {
+        return new ArrayList<>(db.clients.values());
+    }
+
+    public Client updateClient(UUID clientId, String name, String email, String phone) {
+        Client client = getClientById(clientId);
+        
+        // Wenn Name geändert wird, prüfen ob neuer Name bereits existiert
+        if (name != null && !name.trim().isEmpty()) {
+            String newName = name.trim();
+            // Nur prüfen wenn sich der Name tatsächlich ändert
+            if (!client.getName().equalsIgnoreCase(newName)) {
+                boolean nameExists = db.clients.values().stream()
+                        .anyMatch(c -> !c.getId().equals(clientId) && c.getName().equalsIgnoreCase(newName));
+                
+                if (nameExists) {
+                    throw new IllegalArgumentException("Ein Kunde mit dem Namen '" + newName + "' existiert bereits");
+                }
+            }
+            client.setName(newName);
+        }
+        
+        if (email != null && !email.trim().isEmpty()) {
+            client.setEmail(email.trim());
+        }
+        if (phone != null && !phone.trim().isEmpty()) {
+            client.setPhone(phone.trim());
+        }
+        
+        return client;
+    }
+
+    public void deleteClient(UUID clientId) {
+        Client client = getClientById(clientId);
+        
+        // Prüfen ob noch Medien ausgeliehen sind
+        if (!client.getBorrowedItems().isEmpty()) {
+            throw new RuntimeException("Client kann nicht gelöscht werden - hat noch " + 
+                client.getBorrowedItems().size() + " Medien ausgeliehen");
+        }
+        
+        db.clients.remove(clientId);
+    }
 }
